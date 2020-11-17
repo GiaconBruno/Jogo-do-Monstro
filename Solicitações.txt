@@ -1,0 +1,20 @@
+- Incluir chance de Esquivar
+	- 10% de chance de esquivar
+	
+- Incluir Critico
+	- 10% de chance do dano ser critico no monstro
+
+- Incluir Total
+
+- Incluir Classe (Cavaleiro, Caçador, Feiticeiro)
+
+- Inlcuir Sexo (Cavaleira, Caçadora, Feiticeira)
+
+- Cada classe tera atributos diferentes
+	Cavaleiro: HP: 300, ATK: 8, DEF: 8, INT: 50 SKILL: 3T
+	Caçador: HP: 100, ATK: 10, DEF: 5, INT: 50, SKILL: 3T
+	Feiticeiro: HP: 100, ATK: 10, DEF 5, INT: 100, SKILL: 1T
+
+- Incluir Imagens referente cada classe
+
+- Incluir RODADA para usar HABILIDADE

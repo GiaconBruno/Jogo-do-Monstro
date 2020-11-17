@@ -15,38 +15,56 @@
     <div id="app" :class="'container'">
         <div :class="'row header'">
             <h1>Jogo do Monstro</h1>
-            <button v-show="logado" @click="logado=!logado" :class="'p-revert'">Sair</button>
+            <button v-show="logado" @click="logado=!logado; inicio(); start=!start; nome=''"
+                :class="'p-revert'">Sair</button>
         </div>
         <div v-show="!logado" :class="'row box text-center'">
-            <div :class="'col-10 col-sm-4'">
-                <span>Digite seu nome: </span>
+            <div :class="'col-10 mt-3'">
+                <input type="text" v-model="nome" @click="$event.target.value=''" @keyup.enter="dadosPlayer()"
+                    placeholder="Digite seu nome" />
             </div>
-            <div :class="'col-8 col-sm-4 mt-3 mt-sm-0'">
-                <input type="text" v-model="nome" @click="$event.target.value=''" @keyup.enter="logado=!logado" />
+            <div :class="'col-10 mt-3'">
+                <input @click="genero=$event.target.value; classe=''" type="radio" id="male" name="genero" value="o"
+                    checked />
+                <label for="male">Masculino</label>
+                <input @click="genero=$event.target.value; classe=''" type="radio" id="famele" name="genero"
+                    value="a" />
+                <label for="famele">Feminino</label>
             </div>
-            <div :class="'col-10 col-sm-4 mt-3 mt-sm-0'">
-                <button @click="logado=!logado" :style="'backgroundColor: lightseagreen'">Entrar</button>
+            <div :class="'col-10 col-sm-3 mt-3'">
+                <select v-model="classe" name="classes" id="classes">
+                    <option value=""> Selecione a classe </option>
+                    <option :value="'Guerreir'+genero">Guerreir{{ genero }}</option>
+                    <option :value="'Caçador'+(genero=='o'? '':'a')">Caçador{{ (genero=='o') ? '' :'a'  }}</option>
+                    <option :value="'Feiticeir'+genero">Feiticeir{{ genero }}</option>
+                </select>
+            </div>
+            <div :class="'col-10 mt-3'">
+                <button @click="dadosPlayer" :style="'backgroundColor: lightseagreen'">Entrar</button>
             </div>
         </div>
         <div v-show="logado">
             <div :class="'box'">
                 <div :class="'players'">
-                    <h2>{{ nome }}</h2>
+                    <img :class="'imgPlayer'" :src="imgPlayer" alt="">
+                    <p>{{ classe }} - {{ nome }} </p>
                     <div :class="'progress'">
-                        <div :style="playerHealth"></div>
+                        <div :style=" playerHealth"></div>
                     </div>
                     <div>{{ player }}%</div>
                 </div>
                 <div :class="'players'">
-                    <h2>Monstro</h2>
+                    <img :class="'imgMonster'" :src="imgMonster" alt="" :style="{ padding }">
+                    <p>{{ nameMonster }}</p>
+                    <!-- <h2>Monstro</h2> -->
                     <div :class="'progress'">
                         <div :style="monstroHealth"> </div>
                     </div>
                     <div>{{ monstro }}%</div>
                 </div>
             </div>
-            <div v-if="fim" :class="'box'">
-                <span v-if="resultado=='Ganhou'" :style="'color: green'">
+            <div v-if="hasResult" :class="'box'">
+                <span v-if="monstro == 0" :style="'color: green'">
                     <strong>{{ nome }} derrotou o MONSTRO !!!</strong>
                 </span>
                 <span v-else :style="'color: red'">
@@ -56,44 +74,45 @@
             <div :class="'box row text-center'">
                 <button @click="inicio" v-if="!start" :style="'backgroundColor: #474787'">INICIAR NOVO JOGO</button>
                 <template v-else>
-                    <div :class="'col-6 col-sm-3 mt-3 mt-sm-0'">
-                        <button @click="ataque" :style="'backgroundColor: #e55039'">ATAQUE</button>
+                    <div :class="'col-4 col-sm-3 mt-3 mt-sm-0'">
+                        <button @click="ataque(false)" :style="'backgroundColor: #e55039'">ATAQUE</button>
                     </div>
-                    <div :class="'col-6 col-sm-3 mt-3 mt-sm-0'">
-                        <button @click="skill" :style="'backgroundColor: #1e3799'">HABILIDADE</button>
+                    <div :class="'col-4 col-sm-3 mt-3 mt-sm-0'">
+                        <button @click="ataque(true)" :style="'backgroundColor: #1e3799'">HABILIDADE</button>
                     </div>
-                    <div :class="'col-6 col-sm-3 mt-3 mt-sm-0'">
+                    <div :class="'col-4 col-sm-3 mt-3 mt-sm-0'">
                         <button @click="heal" :style="'backgroundColor: #079992'">CURAR</button>
                     </div>
                     <div :class="'col-6 col-sm-3 mt-3 mt-sm-0'">
-                        <button @click="start=!start" :style="'backgroundColor: #747d8c'">DESISTIR</button>
-                    </div>
-                    <div :class="'col-10 mt-3'">
                         <button @click="auto" :style="'backgroundColor: #f7b731; color: #000'">
                             {{ (stop==true) ? 'Auto Game' : 'Stop' }} </button>
                     </div>
+                    <div :class="'col-6 col-sm-3 mt-3'">
+                        <button @click="start=!start" :style="'backgroundColor: #747d8c'">DESISTIR</button>
+                    </div>
                 </template>
             </div>
-            <div v-if="(atkPlayer != '') && (atkMonstro != '')" :class="'box'">
+            <div v-if="(atkPlayer.length) && (atkPlayer.length)" :class="'box'">
                 <ul>
-                    <li v-for="game in jogadas">
-                        <p v-if='atkPlayer[jogadas-game]!=0' :class="'jogador'">
-                            {{ nome }} causou <strong>{{ atkPlayer[jogadas-game] }}</strong> de dano ao
-                            <strong>Monstro</strong>
+                    <li v-for="game in atkPlayer.length">
+                        <p v-if="atkMonstro[game-1]!=0" :class="'monster'">
+                            O <strong> {{ nameMonster }} </strong> causou <strong>{{ atkMonstro[game-1] }}</strong>
+                            de dano em {{ nome }}
+                        </p>
+                        <p v-if="atkPlayer[game-1]!=0" :class="'jogador'">
+                            {{ nome }} causou <strong>{{ atkPlayer[game-1] }}</strong> de dano ao
+                            <strong> {{ nameMonster }} </strong>
                         </p>
                         <p v-else :class="'cura'">
-                            {{ nome }} curou <strong>{{ curaPlayer[jogadas-game] }}</strong> de
+                            {{ nome }} curou <strong>{{ curaPlayer[game-1] }}</strong> de
                             <strong>Vida</strong>
-                        </p>
-                        <p :class="'monster'">
-                            O <strong>Monstro</strong> causou <strong>{{ atkMonstro[jogadas-game] }}</strong>
-                            de dano em {{ nome }}
                         </p>
                     </li>
                 </ul>
             </div>
         </div>
     </div>
+    <p class="text-center" style="font-size: small;">Version: 2.0.0</p>
     <script src="https://unpkg.com/vue"></script>
     <script src="js/all.min.js"></script>
     <script src="js/popper.min.js"></script>

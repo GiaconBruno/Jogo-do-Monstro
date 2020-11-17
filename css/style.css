@@ -15,8 +15,13 @@ body>* {
     color: #16a085;
 }
 
-input {
+input, select, option {
     text-align: center;
+}
+
+select, option {
+    text-align: center;
+    width: 80%;
 }
 
 button {
@@ -30,6 +35,7 @@ button {
     border-radius: 5px;
     box-shadow: 0 0 3px 2px lightgrey;
     transition: all 0.3s;
+    text-transform: uppercase;
 }
 
 button:hover {
@@ -53,6 +59,20 @@ button:hover {
 .players {
     width: 45%;
     text-align: center;
+}
+
+.players .imgPlayer {
+    margin: -50px;
+}
+
+.players .imgMonster {
+    margin: -50px;
+}
+
+.players p {
+    font-size: large;
+    font-weight: 700;
+    margin: 0;
 }
 
 .progress {

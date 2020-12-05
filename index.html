@@ -47,7 +47,7 @@
             <div :class="'box'">
                 <div :class="'players'">
                     <img :class="'imgPlayer'" :src="imgPlayer" alt="">
-                    <p>{{ classe }} - {{ nome }} </p>
+                    <p>{{ classe }} - {{ nome }} <span v-if="player == 0">(Nocauteado)</span></p>
                     <div :class="'progress'">
                         <div :style=" playerHealth"></div>
                     </div>
@@ -55,7 +55,7 @@
                 </div>
                 <div :class="'players'">
                     <img :class="'imgMonster'" :src="imgMonster" alt="" :style="{ padding }">
-                    <p>{{ nameMonster }}</p>
+                    <p>{{ nameMonster }} <span v-if="monstro == 0">(Nocauteado)</span></p>
                     <!-- <h2>Monstro</h2> -->
                     <div :class="'progress'">
                         <div :style="monstroHealth"> </div>

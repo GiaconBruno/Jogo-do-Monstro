@@ -1,6 +1,7 @@
 new Vue({
     el: "#app",
     data: {
+        first: true,
         logado: false,
         nome: '',
         genero: 'o',
@@ -43,16 +44,21 @@ new Vue({
     },
     methods: {
         inicio() {
-            this.player = 100
-            this.atkPlayer = []
-            this.monstro = 100
-            this.atkMonstro = []
-            this.curaPlayer = []
-            this.stop = true
-            this.dadosMonster()
-            this.start = true
-            this.imgPlayer = this.imgPlayer.replace('Die', 'Battle')
-            this.imgPlayer = this.imgPlayer.replace('png', 'gif')
+            if (this.first == true) {
+                this.start = true
+                this.first = false;
+            } else {
+                this.player = 100
+                this.atkPlayer = []
+                this.monstro = 100
+                this.atkMonstro = []
+                this.curaPlayer = []
+                this.stop = true
+                this.dadosMonster()
+                this.start = true
+                this.imgPlayer = this.imgPlayer.replace('Die', 'Battle')
+                this.imgPlayer = this.imgPlayer.replace('png', 'gif')
+            }
         },
         ataque(skill) {
             const plus = skill ? 6 : 0
@@ -101,7 +107,10 @@ new Vue({
             if (this.nome == '') this.nome = 'Jogador'
             if (this.classe == '') alert('Escolha uma classe!')
             else this.logado = true
-            this.imgPlayer = `./media/${(this.classe != 'Caçadora') ? this.classe.replace(/a$/g, 'o') : this.classe.replace(/a$/g, '')}/${this.statusPlayer}-${(this.genero == 'o') ? "Man" : "Woman"}.gif`
+            this.imgPlayer = `./media/${(this.classe != 'Caçadora') ?
+                this.classe.replace(/a$/g, 'o') :
+                this.classe.replace(/a$/g, '')}/${this.statusPlayer}-${(this.genero == 'o') ?
+                    "Man" : "Woman"}.gif`
             this.dadosMonster()
         },
         dadosMonster() {

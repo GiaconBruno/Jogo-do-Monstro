@@ -35,7 +35,7 @@
                 <select v-model="classe" name="classes" id="classes">
                     <option value=""> Selecione a classe </option>
                     <option :value="'Guerreir'+genero">Guerreir{{ genero }}</option>
-                    <option :value="'Caçador'+(genero=='o'? '':'a')">Caçador{{ (genero=='o') ? '' :'a'  }}</option>
+                    <option :value="'Caçador'+(genero=='o'? '':'a')">Caçador{{ (genero=='o') ? '' :'a' }}</option>
                     <option :value="'Feiticeir'+genero">Feiticeir{{ genero }}</option>
                 </select>
             </div>
@@ -113,7 +113,7 @@
         </div>
     </div>
     <p class="text-center" style="font-size: small;">Version: 2.0.0</p>
-    <script src="https://unpkg.com/vue"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <script src="js/all.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/jquery-3.5.1.slim.min.js"></script>
